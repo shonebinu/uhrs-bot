@@ -89,8 +89,9 @@
 	}
 
 	async function main() {
-		const oldHits = GM_getValue("hitsState", []);
+		const oldHits = JSON.parse(localStorage.getItem("hitsState")) || [];
 		const currHits = getHits() || [];
+		console.log(oldHits, currHits);
 
 		for (const hit of currHits) {
 			const isNewHit = !oldHits.find((oldhit) => oldhit.title === hit.title);
@@ -112,7 +113,7 @@
 			}
 		}
 
-		GM_setValue("hitsState", currHits);
+		localStorage.setItem("hitsState", JSON.stringify(currHits));
 
 		setTimeout(() => {
 			location.reload();
@@ -123,9 +124,18 @@
 		const currHits = [];
 		const cards = document.querySelectorAll(".tasks-as-grid-grid > div");
 
-		for (const card of cards) {
-			const title = card.querySelector(".task-card__title__caption").innerText;
+		if (!cards || cards.length === 0) {
+			location.reload();
+		}
 
+		for (const card of cards) {
+			const titleElement = card.querySelector(".task-card__title__caption");
+
+			if (!titleElement || !titleElement.innerText) {
+				location.reload();
+			}
+
+			const title = titleElement.innerText;
 			let pay;
 			let hits;
 
