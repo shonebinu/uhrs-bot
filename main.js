@@ -1,5 +1,5 @@
 // ==UserScript==
-// @name         Find New Hits and Automation Scripts
+s; // @name         Find New Hits and Automation Scripts
 // @namespace    http://tampermonkey.net/
 // @version      1.0
 // @description  Automate tasks and monitor UHRS hits for updates
@@ -57,6 +57,16 @@ async function main() {
 
 	for (const hit of currHits) {
 		const isNewHit = !oldHits.find((oldhit) => oldhit.title === hit.title);
+
+		// Skip, if less than 30 hits
+		if (isNewHit) {
+			if (!(hit.hits.includes(".") || hit.hits.includes("k"))) {
+				const stringPay = hit.hits.match(/\d/g).join("");
+				if (Number(stringPay) < 30) {
+					continue;
+				}
+			}
+		}
 
 		if (isNewHit) {
 			const messageText = `<b>${hit.title}</b>\n\nHits: ${hit.hits}\nPay: ${hit.pay}`;
