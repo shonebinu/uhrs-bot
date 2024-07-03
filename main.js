@@ -1,5 +1,5 @@
 // ==UserScript==
-s; // @name         Find New Hits and Automation Scripts
+// @name         Find New Hits and Automation Scripts
 // @namespace    http://tampermonkey.net/
 // @version      1.0
 // @description  Automate tasks and monitor UHRS hits for updates
@@ -20,7 +20,7 @@ const configuration = {
 	enableNotifications: false, // Set to true to enable notifications
 	enableAPICalls: true, // Set to true to enable API calls
 	enableLogs: true,
-	taskCheckInterval: 10000, // Interval in milliseconds for checking tasks
+	taskCheckInterval: 50000, // Interval in milliseconds for checking tasks
 };
 
 async function sendTelegramMessage(botToken, chatId, messageText) {
@@ -58,7 +58,7 @@ async function main() {
 	for (const hit of currHits) {
 		const isNewHit = !oldHits.find((oldhit) => oldhit.title === hit.title);
 
-		// Skip, if less than 30 hits
+		// Continue, if only less than 30 hits
 		if (isNewHit) {
 			if (!(hit.hits.includes(".") || hit.hits.includes("k"))) {
 				const stringPay = hit.hits.match(/\d/g).join("");
@@ -89,8 +89,10 @@ async function main() {
 	await sendTelegramMessage(
 		configuration.telegram.botToken,
 		configuration.telegram.logId,
-		`Old Hits: ${JSON.stringify(oldHits)}\nNew Hits: ${JSON.stringify(
+		`Old Hits: ${JSON.stringify(oldHits, null, 2)}\nNew Hits: ${JSON.stringify(
 			currHits,
+			null,
+			2,
 		)}`,
 	);
 
