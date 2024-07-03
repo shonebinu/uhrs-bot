@@ -89,11 +89,11 @@ async function main() {
 	await sendTelegramMessage(
 		configuration.telegram.botToken,
 		configuration.telegram.logId,
-		`Old Hits: ${JSON.stringify(oldHits, null, 2)}\nNew Hits: ${JSON.stringify(
-			currHits,
+		`Old Hits: ${JSON.stringify(
+			oldHits,
 			null,
 			2,
-		)}`,
+		)}\n\nNew Hits: ${JSON.stringify(currHits, null, 2)}`,
 	);
 
 	localStorage.setItem("hitsState", JSON.stringify(currHits));
@@ -119,6 +119,12 @@ function getHits() {
 		}
 
 		const title = titleElement.innerText;
+
+		// Avoid some of my specific UHRS hits
+		if (title.startsWith("en-US") || title.startsWith("Voice Comparison")) {
+			continue;
+		}
+
 		let pay;
 		let hits;
 
