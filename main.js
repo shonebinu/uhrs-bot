@@ -186,11 +186,15 @@ function getHits() {
 		) {
 			window.addEventListener("load", () => {
 				setTimeout(() => {
-					document
-						.querySelector(
-							"#root > div > div.home__hero > div.home__hero__content > div > main > button",
-						)
-						.click();
+					const loginButton = document.querySelector(
+						"#root > div > div.home__hero > div.home__hero__content > div > main > button",
+					);
+					if (loginButton) {
+						loginButton.click();
+					} else {
+						// Reload the page if login button is not found
+						window.location.reload();
+					}
 				}, 1000);
 			});
 		}
